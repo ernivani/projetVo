@@ -20,7 +20,7 @@
 		answerWord: ".answerWord",
 		playButton:
 			".activity-selector-cell.singleRunnable .activity-selector-cell-container .activity-selector-cell-main",
-		//
+		trainingEnd: ".trainingEndViewGoHome",
 	};
 
 	const ws = new WebSocket("wss://api.impin.fr/");
@@ -151,8 +151,12 @@
 	function main() {
 		if (document.readyState === "complete") {
 			const playButton = document.querySelector(selectors.playButton);
+			const trainingEnd = document.querySelector(selectors.trainingEnd);
 			if (playButton) {
 				playButton.click();
+			}
+			if (trainingEnd) {
+				trainingEnd.click();
 			}
 			learnSpelling();
 		}
