@@ -27,16 +27,10 @@
 	let understand = false;
 	let continueLearning = true; // Variable de contrôle pour continuer ou arrêter l'apprentissage
 
-	ws.onopen = () => {
-		console.log("WebSocket connection opened");
-	};
+	ws.onopen = () => {};
 
 	ws.onmessage = (event) => {
 		const result = JSON.parse(event.data);
-
-		if (result.type === "sentenceCheck") {
-			console.log("sentenceCheck :", result.payload);
-		}
 
 		if (result.payload.correct === 1) {
 			const noMistakeButton = document.querySelector(
@@ -82,17 +76,6 @@
 			if (sentence) {
 				const errorNode = Array.from(sentence.childNodes).find(
 					(node) => {
-						// enlever tout les charactères spéciaux et les espaces
-
-						console.log(
-							result.payload.incorrect_word
-								.trim()
-								.replace(/^['’]/, "")
-								.replace(/‑/g, " ")
-								.split(/[\s'’.,;:!?\u2026]/)[0]
-								.trim()
-						);
-
 						if (
 							node.innerText.trim() ===
 							result.payload.incorrect_word
@@ -115,7 +98,7 @@
 						nextButton.click();
 					}
 				} else {
-					console.log("Error not found");
+					console.error("Error not found");
 				}
 			}
 		}
