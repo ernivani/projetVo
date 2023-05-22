@@ -18,6 +18,8 @@
 		buttonOk: ".buttonOk",
 		exitButton: ".exitButton",
 		answerWord: ".answerWord",
+		playButton:
+			".activity-selector-cell.singleRunnable .activity-selector-cell-container .activity-selector-cell-main",
 		//
 	};
 
@@ -46,9 +48,7 @@
 			}
 			// todo: attendre 0.2 secondes que la page se mette à jour
 
-			setTimeout(() => {
-				console.log("Timeout");
-			}, 200);
+			setTimeout(() => {}, 200);
 
 			const spanAnswer = document.querySelector(
 				"span[title='Mauvaise réponse']"
@@ -83,19 +83,23 @@
 				const errorNode = Array.from(sentence.childNodes).find(
 					(node) => {
 						// enlever tout les charactères spéciaux et les espaces
+
 						console.log(
 							result.payload.incorrect_word
 								.trim()
 								.replace(/^['’]/, "")
-								.split(/[\s-'’.,;:!?\u2026]/)[0]
+								.replace(/‑/g, " ")
+								.split(/[\s'’.,;:!?\u2026]/)[0]
 								.trim()
 						);
+
 						if (
 							node.innerText.trim() ===
 							result.payload.incorrect_word
 								.trim()
 								.replace(/^['’]/, "")
-								.split(/[\s-'’.,;:!?\u2026]/)[0]
+								.replace(/‑/g, " ")
+								.split(/[\s'’.,;:!?\u2026]/)[0]
 								.trim()
 						) {
 							return node;
@@ -163,11 +167,19 @@
 
 	function main() {
 		if (document.readyState === "complete") {
+			const playButton = document.querySelector(selectors.playButton);
+			if (playButton) {
+				playButton.click();
+			}
 			learnSpelling();
 		}
 	}
 
 	window.addEventListener("load", function () {
-		setInterval(main, 3000);
+		setInterval(main, 1300);
 	});
 })();
+
+const element = document.querySelector(
+	".activity-selector-cell.singleRunnable .activity-selector-cell-container .activity-selector-cell-main"
+);
