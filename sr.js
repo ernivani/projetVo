@@ -179,7 +179,3 @@
 		setInterval(main, 1300);
 	});
 })();
-
-const element = document.querySelector(
-	".activity-selector-cell.singleRunnable .activity-selector-cell-container .activity-selector-cell-main"
-);
