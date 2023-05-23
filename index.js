@@ -79,13 +79,14 @@ wss.on("connection", (ws, request) => {
         if (data.type === "sentenceCheckAnswer") {
             // add to the database the sentence with the answerWord
             console.log(data.payload);
+            let date = new Date(); // gets the current date and time
             const { sentence, answerWord } = data.payload;
             const query =
-                "INSERT INTO `vo_table` (`Date`,`phrase`, `mot_erreur`, `correcte`) VALUES (NOW(), ?, ?, ?)";
+                "INSERT INTO `vo_table` (`Date`,`phrase`, `mot_erreur`, `correcte`) VALUES (?, ?, ?, ?)";
             try {
                 await connection
                     .promise()
-                    .query(query, [sentence, answerWord, 0]);
+                    .query(query, [date, sentence, answerWord, 0]);
             } catch (err) {
                 console.log(err);
             }
@@ -96,6 +97,24 @@ wss.on("connection", (ws, request) => {
         clients.delete(id); // Remove the connection from the clients map
         console.log("Client disconnected :", id);
     });
+});
+
+// get /
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/src/index.html");
+});
+
+app.get("/stats", (req, res) => {
+    // send json all the values in the database
+    const query = "SELECT * FROM `vo_table`";
+    try {
+        connection.query(query, (err, rows, fields) => {
+            if (err) throw err;
+            res.json(rows);
+        });
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 const server = app.listen(3000, () => {
